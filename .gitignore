@@ -1,0 +1,6 @@
+CS50LMS/__pycache__/
+LMS/__pycache__/
+LMS/migrations/
+static/courses/
+static/LMS/video/
+db.sqlite3

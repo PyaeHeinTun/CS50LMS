@@ -1,0 +1,136 @@
+{% extends 'LMS/layout.html' %}
+
+{% block title %}
+CS50 LMS
+{% endblock %}
+
+{% block body %}
+<!-- Content -->
+<main class="pt-20 md:pt-8 p-4 md:p-8 flex-1 overflow-y-auto h-screen bg-gray-50">
+    <!-- Content Area -->
+
+    <!-- Top Header -->
+    <div class="flex flex-col md:flex-row justify-end items-center mb-6">
+        {% if user.role == "Student" %}
+        <form method="get" action="/search" class="w-full mx-auto md:max-w-96">
+            <label for="default-search"
+                class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+            <div class="relative">
+
+                <input type="search" id="default-search"
+                    class="text-xs block w-full p-4  text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Search Mockups, Logos..." required="" name="query">
+                <button type="submit"
+                    class="text-xs text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+            </div>
+        </form>
+        {% endif %}
+
+        <div class="ml-2 hidden md:flex md:items-end md:flex-col md:block pr-0 md:mt-0">
+            <span class="font-semibold text-gray-700 text-sm font-bold md:text-base">Shun</span>
+            <img src="" class="md:w-8 rounded-full ml-2 inline-block">
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    {% if user.role == "Teacher" %}
+    <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white flex flex-col items-center justify-between p-4 rounded-lg shadow">
+            <p class="text-xs md:text-sm text-gray-500">My Courses</p>
+            <h2 class="text-lg md:text-xl font-bold">{{my_course_count}}</h2>
+        </div>
+        <div class="bg-white flex flex-col items-center justify-between p-4 rounded-lg shadow">
+            <p class="text-xs md:text-sm text-gray-500">Total Student</p>
+            <h2 class="text-lg md:text-xl font-bold">{{total_student}}</h2>
+        </div>
+    </div>
+    {% else %}
+    <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white flex flex-col items-center justify-between p-4 rounded-lg shadow">
+            <p class="text-xs md:text-sm text-gray-500">My Courses</p>
+            <h2 id="my_course_count" class="text-lg md:text-xl font-bold">{{my_course_count}}</h2>
+        </div>
+        <div class="bg-white flex flex-col items-center justify-between p-4 rounded-lg shadow">
+            <p class="text-xs md:text-sm text-gray-500">Total Saved</p>
+            <h2 class="text-lg md:text-xl font-bold">{{saved_course_count}}</h2>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Popular Courses -->
+    <h3 class="text-base md:text-lg font-semibold mb-4">Popular Courses</h3>
+    <div class="overflow-x-auto mb-6">
+        <div class="flex gap-6">
+            <!-- Course Card -->
+            {% for course in popular_courses%}
+            <div onclick="window.location.href='/detail/{{course.id}}'"
+                class="bg-white rounded-lg shadow overflow-hidden md:w-64 flex-shrink-0 cursor-pointer">
+                <img src="{{course.course_img}}" alt="{{course.title}}" class="w-full h-32 md:h-36 object-cover" />
+                <div class="p-4">
+                    <h4 class="font-semibold text-sm md:text-lg mb-1">{{course.title}}</h4>
+                    <p class="text-xs md:text-sm text-gray-500 mb-2">{{course.chapter|length}} Chapter •
+                        {{course.totalVideoDuration}} Hours</p>
+                    <div id="btnSection_{{course.id}}" class="flex justify-between items-center">
+                        <span class="text-indigo-600 font-bold text-sm md:text-base">${{course.price}}</span>
+                        {% if user.role == "Student" %}
+                        {% if course.isEnrolled %}
+                        <button onclick="window.location.href = '/detail/{{course.id}}'"
+                            class="bg-indigo-600 text-white px-2 md:px-3 py-1 rounded-md text-xs md:text-sm">
+                            Go To Course
+                        </button>
+                        {% else %}
+                        <button onclick="event.stopPropagation();clickEnrollButton({{course.id}})"
+                            class="bg-indigo-600 text-white px-2 md:px-3 py-1 rounded-md text-xs md:text-sm">
+                            Enroll Now
+                        </button>
+                        {% endif %}
+                        {% else %}
+                        <a href="/detail/{{course.id}}"
+                            class="bg-indigo-600 text-white px-2 md:px-3 py-1 rounded-md text-xs md:text-sm">
+                            Preview Course
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <!-- My Courses Table -->
+    <h3 class="text-base md:text-lg font-semibold mb-4">My Course</h3>
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <table class="w-full text-xs md:text-sm">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="p-2 md:p-3 text-left">Course Name</th>
+                    <th class="p-2 md:p-3 text-left">Chapters</th>
+                    <th class="p-2 md:p-3 text-left">Hours</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Rows will be populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="flex justify-between items-center mt-4 text-sm">
+        <button id="prevPage"
+            class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none disabled:opacity-50"
+            disabled>
+            Previous
+        </button>
+        <div id="paginationInfo" class="text-gray-700"></div>
+        <button id="nextPage"
+            class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none disabled:opacity-50"
+            disabled>
+            Next
+        </button>
+    </div>
+
+    <script src="/static/LMS/js/index.js" type="module"></script>
+</main>
+{% endblock %}

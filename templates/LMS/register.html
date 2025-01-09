@@ -1,0 +1,86 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up CS50 LMS</title>
+    <!-- Font Awesome -->
+    <link href="{% static 'LMS/css/all.min.css' %}" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="{% static 'LMS/css/g_fonts.css' %}" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="{% static 'LMS/css/mdb.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'LMS/css/toast.css' %}" rel="stylesheet" />
+    <link href="{% static 'LMS/js/tailwind.js' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="d-flex flex-column justify-content-center container vh-100">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body text-center">
+                        <form id="submitForm">
+                            {% csrf_token %}
+                            <h2 class="fw-bold text-uppercase">Sign Up</h2>
+                            <p class="text-white-50">Sign Up To Join Network</p>
+
+                            <div data-mdb-input-init="" class="form-outline form-white mb-2">
+                                <input type="text" name="usernameX" id="usernameX" class="form-control form-control-lg">
+                                <label class="form-label" for="usernameX">Username</label>
+                            </div>
+
+                            <div data-mdb-input-init="" class="form-outline form-white mb-2">
+                                <input type="email" name="emailX" id="emailX" class="form-control form-control-lg">
+                                <label class="form-label" for="emailX">Email</label>
+                            </div>
+
+                            <div data-mdb-input-init="" class="form-outline form-white mb-2">
+                                <input type="password" name="passwordX" id="passwordX"
+                                    class="form-control form-control-lg">
+                                <label class="form-label" for="passwordX">Password</label>
+                            </div>
+
+                            <div class="w-full max-w-sm mx-auto mb-2">
+                                <div class="relative">
+                                    <select name="role" id="selectOption"
+                                        class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                        <option value="Student">Student</option>
+                                        <option value="Teacher">Teacher</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-outline-light btn-lg px-5 mb-2" type="submit">SignUp</button>
+
+                            <div>
+                                <p class="mb-0">Already have a account? <a href="{% url 'login' %}"
+                                        class="text-white-50 fw-bold">Log In</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast show">
+        <div class="toast-content">
+            <!-- <i id="toast_icon" class="fas fa-solid fa-check check"></i> -->
+            <div class="message">
+                <span id="toast_title" class="text text-1">Success</span>
+                <span id="toast_body" class="text text-2">Your changes has been saved</span>
+            </div>
+        </div>
+        <div class="progress"></div>
+    </div>
+
+    <script src="{% static 'LMS/js/mdb.umd.min.js' %}"></script>
+    <script src="{% static 'LMS/js/register.js' %}" type="module"></script>
+</body>
+
+</html>

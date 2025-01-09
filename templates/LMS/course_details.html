@@ -1,0 +1,178 @@
+{% extends 'LMS/layout.html' %}
+
+{% block title %}
+Grammer Class
+{% endblock %}
+
+{% block body %}
+
+<!-- Right Content -->
+<main class="pt-10 md:pt-8 p-4 flex-1 overflow-y-auto h-screen bg-gray-50">
+    <!-- Page Container -->
+    <div class="max-w-screen-xl mx-auto">
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+            <!-- Sidebar (Chapters) -->
+            <div class="bg-white rounded-lg shadow p-4 md:col-span-2 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">{{course.title}}</h3>
+
+                    <!-- Chapter List -->
+                    <ul id="chaptersList">
+                        {% if isOwner or isAlreadyBuy %}
+                        {% for chapter in course.chapter %}
+                        <li class="mb-3">
+                            <div
+                                class="toogle-btn flex flex-row justify-between items-center rounded hover:bg-green-600 toggle-btn w-full text-left px-3 py-2 bg-green-500 text-white font-semibold rounded">
+                                <button class="hover:bg-green-600 text-start text-xs">
+                                    Chapter {{forloop.counter}}: {{chapter.title}}
+                                </button>
+                                <svg class="{%if forloop.first%}active{%else%}inactive{%endif%}" id="arrow_icon"
+                                    xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                    width="24px" fill="#4B77D1">
+                                    <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z" />
+                                </svg>
+                            </div>
+
+                            <div class="{%if forloop.first%}shownContent{%else%}unshownContent{%endif%}">
+                                {% for lecture in chapter.lectures %}
+                                <div onclick="changeLectureContent({{lectureList}},{{lecture.id}})"
+                                    class='p-2 flex justify-between items-center bg-gray-200 cursor-pointer'>
+                                    <p class="text-start text-xs">
+                                        Lecture {{forloop.counter}}: {{lecture.title}}
+                                    </p>
+                                    <!-- Drag Handle -->
+                                    <div class="cursor-move text-gray-400 hover:text-gray-600">
+                                        {% if lecture.lectureType == "video" %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                            width="24px" fill="#4B77D1">
+                                            <path
+                                                d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h480q33 0 56.5 23.5T720-720v180l160-160v440L720-420v180q0 33-23.5 56.5T640-160H160Zm0-80h480v-480H160v480Zm0 0v-480 480Z" />
+                                        </svg>
+                                        {% else %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                            width="24px" fill="#4B77D1">
+                                            <path
+                                                d="M560-360q17 0 29.5-12.5T602-402q0-17-12.5-29.5T560-444q-17 0-29.5 12.5T518-402q0 17 12.5 29.5T560-360Zm-30-128h60q0-29 6-42.5t28-35.5q30-30 40-48.5t10-43.5q0-45-31.5-73.5T560-760q-41 0-71.5 23T446-676l54 22q9-25 24.5-37.5T560-704q24 0 39 13.5t15 36.5q0 14-8 26.5T578-596q-33 29-40.5 45.5T530-488ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z" />
+                                        </svg>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </li>
+                        {% endfor %}
+                        {% else %}
+
+                        {% for chapter in course.chapter %}
+                        {% if forloop.first %}
+                        <li class="mb-3">
+                            <div
+                                class="toogle-btn flex flex-row justify-between items-center rounded hover:bg-green-600 toggle-btn w-full text-left px-3 py-2 bg-green-500 text-white font-semibold rounded">
+                                <button class="hover:bg-green-600 text-start text-xs">
+                                    Chapter 1: {{course.chapter.0.title}}
+                                </button>
+                                <svg class="active" id="arrow_icon" xmlns="http://www.w3.org/2000/svg" height="24px"
+                                    viewBox="0 -960 960 960" width="24px" fill="#4B77D1">
+                                    <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z" />
+                                </svg>
+                            </div>
+
+                            <div class="shownContent">
+                                {% for lecture in course.chapter.0.lectures %}
+                                <div onclick="changeLectureContent({{lectureList}},{{lecture.id}})"
+                                    class='p-2 flex justify-between items-center bg-gray-200 cursor-pointer'>
+                                    <p class="text-start text-xs">
+                                        Lecture {{forloop.counter}}: {{lecture.title}}
+                                    </p>
+                                    <!-- Drag Handle -->
+                                    <div class="cursor-move text-gray-400 hover:text-gray-600">
+                                        {% if lecture.lectureType == "video" %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                            width="24px" fill="#4B77D1">
+                                            <path
+                                                d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h480q33 0 56.5 23.5T720-720v180l160-160v440L720-420v180q0 33-23.5 56.5T640-160H160Zm0-80h480v-480H160v480Zm0 0v-480 480Z" />
+                                        </svg>
+                                        {% else %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                            width="24px" fill="#4B77D1">
+                                            <path
+                                                d="M560-360q17 0 29.5-12.5T602-402q0-17-12.5-29.5T560-444q-17 0-29.5 12.5T518-402q0 17 12.5 29.5T560-360Zm-30-128h60q0-29 6-42.5t28-35.5q30-30 40-48.5t10-43.5q0-45-31.5-73.5T560-760q-41 0-71.5 23T446-676l54 22q9-25 24.5-37.5T560-704q24 0 39 13.5t15 36.5q0 14-8 26.5T578-596q-33 29-40.5 45.5T530-488ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z" />
+                                        </svg>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </li>
+
+                        {% else %}
+                        <li class="text-gray-400 flex justify-between px-3 py-2 bg-gray-200 rounded mb-3">
+                            <span>I can' t see it.</span>
+                            <span>🔒</span>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="w-full grid grid-cols-2 gap-2">
+                    {% if isAlreadyBuy %}
+                    {% if isSaved %}
+                    <button id="saveCourseBtn" class="col-span-2 bg-slate-300 px-3 py-2">Unsave</button>
+                    {%else%}
+                    <button id="saveCourseBtn" class="col-span-2 bg-slate-300 px-3 py-2">Save</button>
+                    {%endif%}
+                    {% else %}
+                    {% if isSaved %}
+                    <button id="saveCourseBtn" class="col-span-1 bg-slate-300 px-3 py-2">Unsave</button>
+                    {%else%}
+                    <button id="saveCourseBtn" class="col-span-1 bg-slate-300 px-3 py-2">Save</button>
+                    {%endif%}
+
+                    {%if user.role == "Teacher" %}
+                    <button onclick="window.location.href='/editCourse/{{course.id}}'"
+                        class="col-span-1  bg-green-500 px-3 py-2">Edit</button>
+                    {%else%}
+                    <button id="enrollCourseBtn" class="col-span-1  bg-green-500 px-3 py-2">Enroll</button>
+                    {%endif%}
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Course Video & Description -->
+            <div id="renderLectureContent" class="md:col-span-3 bg-white rounded-lg shadow">
+
+            </div>
+        </div>
+    </div>
+    <script src="/static/LMS/js/course_details.js" type="module"></script>
+</main>
+
+<style>
+    .active {
+        transform: rotate(90deg);
+        transition: transform 0.3s ease-out;
+    }
+
+    .inactive {
+        transform: rotate(0deg);
+        transition: transform 0.3s ease-out;
+    }
+
+    .shownContent {
+        max-height: 80vh;
+        opacity: 1;
+        transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    }
+
+    .unshownContent {
+        max-height: 0;
+        opacity: 0;
+        transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+        overflow-y: hidden;
+    }
+</style>
+{% endblock %}

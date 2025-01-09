@@ -1,0 +1,142 @@
+{% extends 'LMS/layout.html' %}
+
+{% block body %}
+<div class="pt-10 md:pt-8 p-4 md:p-8 flex-1 overflow-y-auto h-screen bg-gray-50">
+    <h3>Edit Course</h3>
+    <!-- Container -->
+    <div class="max-w-5xl mx-auto pt-5">
+        <!-- Create Course -->
+        <form id="courseForm" class="w-full md:grid md:grid-cols-2 md:gap-10" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" style="display: none;" name="courseId" value="{{course.id}}">
+            <div class="relative z-0 w-full mb-5 group">
+                <input type="text" name="title" id="courseName"
+                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    value="{{course.title}}" required />
+                <label for="courseName"
+                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">CourseName</label>
+            </div>
+            <div class="relative z-0 w-full mb-5 group">
+                <input type="number" name="price" name="" id="coursePrice"
+                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    required value="{{course.price}}" />
+                <label for="coursePrice"
+                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Price</label>
+            </div>
+            <div class="relative z-0 w-full mb-5 group">
+                <textarea name="description" id="courseDescription"
+                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    required>{{course.description}}</textarea>
+                <label for="courseDescription"
+                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Description</label>
+            </div>
+            <button type="submit"
+                class="col-span-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save
+                To Cloud</button>
+        </form>
+
+
+        <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your
+            details.
+            Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy
+                Policy</a>.</p>
+
+
+        <!-- Section Block -->
+        <div id="chapter_list">
+            {% for chapter in course.chapter %}
+            <div id="chapterSection_{{chapter.id}}" class="bg-white border rounded-lg shadow-sm mb-6 chapterSection_">
+                <!-- Section Header -->
+                <div class="flex justify-between items-center p-4 border-b bg-gray-100">
+                    <div class="flex items-center space-x-2">
+                        <span class="font-semibold text-gray-700 text-sm md:text-base">
+                            Chapter{{forloop.counter}}:
+                        </span>
+                        <span class="text-gray-500 text-sm md:text-base">{{chapter.title}}</span>
+                    </div>
+                    <div>
+                        <button id="deleteChapter_{{chapter.id}}"
+                            class="bg-blue-500 text-white text-xs md:text-sm px-3 py-1 rounded hover:bg-blue-600">
+                            - Delete Chapter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lecture Content -->
+                {% for lecture in chapter.lectures %}
+                <div class="p-4 flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-gray-700 text-sm md:text-base font-medium">
+                            Lecture {{forloop.counter}}:
+                        </span>
+                        <span class="text-gray-600 text-sm md:text-base">
+                            {{lecture.title}}
+                        </span>
+                    </div>
+                    <!-- Drag Handle -->
+                    <div class="cursor-move text-gray-400 hover:text-gray-600">
+                        {% if lecture.lectureType == "video" %}
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                            fill="#4B77D1">
+                            <path
+                                d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h480q33 0 56.5 23.5T720-720v180l160-160v440L720-420v180q0 33-23.5 56.5T640-160H160Zm0-80h480v-480H160v480Zm0 0v-480 480Z" />
+                        </svg>
+                        {% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                            fill="#4B77D1">
+                            <path
+                                d="M560-360q17 0 29.5-12.5T602-402q0-17-12.5-29.5T560-444q-17 0-29.5 12.5T518-402q0 17 12.5 29.5T560-360Zm-30-128h60q0-29 6-42.5t28-35.5q30-30 40-48.5t10-43.5q0-45-31.5-73.5T560-760q-41 0-71.5 23T446-676l54 22q9-25 24.5-37.5T560-704q24 0 39 13.5t15 36.5q0 14-8 26.5T578-596q-33 29-40.5 45.5T530-488ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z" />
+                        </svg>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap justify-between gap-2 items-center mb-6">
+            <button id="addLectureBtn"
+                class="flex-1 md:flex-none bg-blue-500 text-white text-sm px-2 py-2 rounded hover:bg-blue-600">
+                Add Lecture
+            </button>
+            <button id="addQuizBtn"
+                class="flex-1 md:flex-none bg-blue-500 text-white text-sm px-2 py-2 rounded hover:bg-blue-600">
+                Add Quiz
+            </button>
+        </div>
+
+        <!-- Add Section -->
+        <div class="flex justify-between items-center mt-6">
+            <button id="addChapterBtn"
+                class="bg-blue-500 w-full text-white text-sm px-6 py-2 rounded hover:bg-blue-600">
+                + Add Chapter
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="addPopUpModal"
+        class="fixed top-0 left-0 md:left-20 w-full h-full bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-lg max-w-sm md:max-w-xs w-full p-6">
+            <form id="addFormModal">
+                {% csrf_token %}
+                <input type="text" style="display: none;" name="courseId" value="{{course.id}}">
+                <div id="renderModalForm">
+
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" id="closeModalBtn"
+                        class="bg-gray-500 text-white text-sm px-4 py-2 rounded hover:bg-gray-600">Cancel</button>
+                    <button type="submit"
+                        class="bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600">Save to cloud
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/LMS/js/edit_course.js" type="module"></script>
+</div>
+{% endblock %}

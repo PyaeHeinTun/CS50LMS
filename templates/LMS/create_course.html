@@ -1,0 +1,55 @@
+{% extends 'LMS/layout.html' %}
+
+{% block body %}
+<div class="pt-10 md:pt-8 p-4 md:p-8 flex-1 overflow-y-auto h-screen bg-gray-50">
+    <h3>Create Course</h3>
+    <!-- Container -->
+    <div class="max-w-5xl mx-auto pt-5">
+        <!-- Create Course -->
+        <form id="courseForm" class="w-full md:grid md:grid-cols-2 md:gap-10" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="relative z-0 w-full mb-5 group">
+                <input type="text" name="title" id="courseName"
+                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" " required />
+                <label for="courseName"
+                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">CourseName</label>
+            </div>
+            <div class="relative z-0 w-full mb-5 group">
+                <input type="number" name="price" name="" id="coursePrice"
+                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" " required />
+                <label for="coursePrice"
+                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Price</label>
+            </div>
+            <div class="relative z-0 w-full mb-5 group">
+                <textarea name="description" id="courseDescription"
+                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" " required></textarea>
+                <label for="courseDescription"
+                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Description</label>
+            </div>
+            <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="courseImage">Upload
+                    Image</label>
+                <input
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    aria-describedby="courseImage_help" name="image" id="courseImage" type="file">
+                <div class="mt-1 text-sm text-gray-500" id="courseImage_help">A course picture is
+                    useful to identify your course.</div>
+
+            </div>
+            <button type="submit"
+                class="col-span-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save
+                To Cloud</button>
+        </form>
+
+
+        <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your
+            details.
+            Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy
+                Policy</a>.</p>
+    </div>
+    <script src="static/LMS/js/create_course.js" type="module"></script>
+</div>
+{% endblock %}

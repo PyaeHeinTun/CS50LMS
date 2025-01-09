@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogIn CS50 LMS</title>
+    <!-- Font Awesome -->
+    <link href="{% static 'LMS/css/all.min.css' %}" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="{% static 'LMS/css/g_fonts.css' %}" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="{% static 'LMS/css/mdb.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'LMS/css/toast.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="d-flex flex-column justify-content-center container vh-100">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body text-center">
+
+                        <form id="submitForm" class="mt-md-4">
+                            {% csrf_token %}
+                            <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                            <p class="text-white-50">Please enter your login and password!</p>
+
+                            <div data-mdb-input-init="" class="form-outline form-white mb-4">
+                                <input type="email" name="emailX" id="emailX" class="form-control form-control-lg">
+                                <label class="form-label" for="emailX">Email</label>
+                            </div>
+
+                            <div data-mdb-input-init="" class="form-outline form-white mb-4">
+                                <input type="password" name="passwordX" id="passwordX"
+                                    class="form-control form-control-lg">
+                                <label class="form-label" for="passwordX">Password</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-outline-light btn-lg px-5 mb-2">Login</button>
+
+                            <div>
+                                <p class="mb-0">Don't have an account? <a href="/register"
+                                        class="text-white-50 fw-bold">Sign
+                                        Up</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast show">
+        <div class="toast-content">
+            <!-- <i id="toast_icon" class="fas fa-solid fa-check check"></i> -->
+            <div class="message">
+                <span id="toast_title" class="text text-1">Success</span>
+                <span id="toast_body" class="text text-2">Your changes has been saved</span>
+            </div>
+        </div>
+        <div class="progress"></div>
+    </div>
+
+    <script src="{% static 'LMS/js/mdb.umd.min.js' %}"></script>
+    <script src="{% static 'LMS/js/login.js' %}" type="module"></script>
+</body>
+
+</html>

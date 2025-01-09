@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}CS50 LMS{% endblock %}</title>
+    <script src="{% static 'LMS/js/tailwind.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'LMS/css/toast.css'%}">
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Main Container -->
+    <div class="flex h-screen">
+        <!-- Sidebar Toggle Button for Mobile -->
+        <button id="sidebarToggle" class="md:hidden p-2 text-gray-700 focus:outline-none fixed top-2 left-2 z-20">
+            <!-- Hamburger Icon -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                </path>
+            </svg>
+        </button>
+
+        <!-- Sidebar -->
+        <aside id="sidebar"
+            class="h-full bg-white p-5 pt-10 md:pt-5 border-r shadow-md md:min-h-screen fixed md:relative top-0 left-0 z-10 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+            <h1 class="text-xl md:text-2xl font-bold text-indigo-600 mb-5">CS50 LMS</h1>
+            <nav class="flex flex-col space-y-4">
+                <a href="{% url 'index' %}" class="text-sm md:text-base text-gray-700 hover:bg-gray-200 p-2 rounded-md">
+                    Dashboard
+                </a>
+                <a href="{% url 'myCourse' %}"
+                    class="text-sm md:text-base text-gray-700 hover:bg-gray-200 p-2 rounded-md">
+                    My Course
+                </a>
+                <a href="{% url 'savedCourse' %}"
+                    class="text-sm md:text-base text-gray-700 hover:bg-gray-200 p-2 rounded-md">
+                    Saved Course
+                </a>
+
+                {% if user.role == "Teacher" %}
+                <a href="{% url 'createCourse' %}"
+                    class="text-sm md:text-base text-gray-700 hover:bg-gray-200 p-2 rounded-md">
+                    Create Course
+                </a>
+                {% endif %}
+                <a href="{% url 'logout' %}"
+                    class="text-sm md:text-base text-gray-700 hover:bg-gray-200 p-2 rounded-md">
+                    Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Overlay for Closing Sidebar on Mobile -->
+        <div id="overlay" class="fixed inset-0 bg-black opacity-50 hidden md:hidden z-5"></div>
+
+        {%block body%}
+        {%endblock%}
+    </div>
+
+    <div id="toast" class="toast show">
+        <div class="toast-content">
+            <!-- <i id="toast_icon" class="fas fa-solid fa-check check"></i> -->
+            <div class="message">
+                <span id="toast_title" class="text text-1">Success</span>
+                <span id="toast_body" class="text text-2">Your changes has been saved</span>
+            </div>
+        </div>
+        <div class="progress"></div>
+    </div>
+
+    <script src='{% static "LMS/js/layout.js" %}'></script>
+    {% block script %}
+    {% endblock %}
+</body>
+
+</html>
